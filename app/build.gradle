@@ -51,10 +51,35 @@ android {
             keyAlias "default"
             keyPassword "123456"
         }
+        debugConfig {
+            storeFile file("default.keystore")
+            storePassword "123456"
+            keyAlias "default"
+            keyPassword "123456"
+        }
     }
 
     lintOptions {
         abortOnError false
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            //新名字
+            def newName
+            //输出文件夹
+            def outDirectory
+            //是否为Jenkins打包，输出路径不同
+            if (IN_JENKINS.toBoolean()) {
+                //BUILD_PATH为服务器输出路径
+                outDirectory = appReleaseDir
+                newName = "test" + "-" + defaultConfig.versionName + ".apk"
+            } else {
+                outDirectory = output.outputFile.getParent()
+                newName = "test" + "-" + defaultConfig.versionName + ".apk"
+            }
+            variant.getPackageApplicationProvider().get().outputDirectory = new File(outDirectory, newName)
+        }
     }
 }
 
