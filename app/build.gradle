@@ -66,21 +66,26 @@ android {
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
             //新名字
-            def newName
             //输出文件夹
             def outDirectory
             //是否为Jenkins打包，输出路径不同
             if (IN_JENKINS.toBoolean()) {
                 //BUILD_PATH为服务器输出路径
                 outDirectory = appReleaseDir
-                newName = "test" + "-" + defaultConfig.versionName + ".apk"
+                outputFileName = "test" + "_" + defaultConfig.versionName + "_" + getDate() + ".apk"
             } else {
                 outDirectory = output.outputFile.getParent()
-                newName = "test" + "-" + defaultConfig.versionName + ".apk"
+                outputFileName = "test" + "_" + defaultConfig.versionName + "_" + getDate() + ".apk"
             }
-            variant.getPackageApplicationProvider().get().outputDirectory = new File(outDirectory, newName)
+            variant.getPackageApplicationProvider().get().outputDirectory = new File(outDirectory)
         }
     }
+}
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format("yyyyMMddHHmm")
+    return formattedDate
 }
 
 dependencies {
