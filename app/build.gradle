@@ -71,7 +71,7 @@ android {
             //是否为Jenkins打包，输出路径不同
             if (IN_JENKINS.toBoolean()) {
                 //BUILD_PATH为服务器输出路径
-                outDirectory = appReleaseDir
+                outDirectory = output.outputFile.getParent()
                 outputFileName = "test" + "_" + defaultConfig.versionName + "_" + getDate() + ".apk"
             } else {
                 outDirectory = output.outputFile.getParent()
